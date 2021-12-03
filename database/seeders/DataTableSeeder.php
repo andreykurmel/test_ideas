@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Datas\DataTable;
-use App\Models\Datas\DataTableColumn;
-use App\Models\Dropdowns\Dropdown;
+use App\Models\Datas\DataTableModel;
+use App\Models\Datas\DataTableColumnModel;
+use App\Models\Dropdowns\DropdownModel;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +17,7 @@ class DataTableSeeder extends Seeder
      */
     public function run()
     {
-        if (!DataTable::count()) {
+        if (!DataTableModel::count()) {
             $admin = User::where('role', '=', 'admin')->first();
             $user = User::where('role', '=', 'user')->first();
             $names = [
@@ -27,7 +27,7 @@ class DataTableSeeder extends Seeder
                 ['user_id' => $user->id, 'name' => 'Geometry', 'db_name' => 'geom_73481'],
                 ['user_id' => $user->id, 'name' => 'Structure', 'db_name' => 'structure_879234'],
             ];
-            $ddl = Dropdown::where('user_id', '=', $admin->id)->first();
+            $ddl = DropdownModel::where('user_id', '=', $admin->id)->first();
             $items = [
                 ['field'=>'str', 'header'=>'String', 'default'=>''],
                 ['field'=>'int', 'header'=>'Integer', 'default'=>'0'],
@@ -35,10 +35,10 @@ class DataTableSeeder extends Seeder
             ];
 
             foreach ($names as $n) {
-                $table = DataTable::create($n);
+                $table = DataTableModel::create($n);
 
                 foreach ($items as $i) {
-                    DataTableColumn::create( array_merge($i, [
+                    DataTableColumnModel::create( array_merge($i, [
                         'table_id' => $table->id,
                         'ddl_id' => ($n['user_id'] == $admin->id && $i['field']=='str' ? $ddl->id : null),
                     ]) );

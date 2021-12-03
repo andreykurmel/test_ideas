@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Datas\DataTable;
-use App\Models\Datas\DataTableColumn;
-use App\Models\Dropdowns\Dropdown;
-use App\Models\Dropdowns\DropdownItem;
+use App\Models\Datas\DataTableModel;
+use App\Models\Datas\DataTableColumnModel;
+use App\Models\Dropdowns\DropdownModel;
+use App\Models\Dropdowns\DropdownItemModel;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -18,7 +18,7 @@ class DropdownSeeder extends Seeder
      */
     public function run()
     {
-        if (!Dropdown::count()) {
+        if (!DropdownModel::count()) {
             $admin = User::where('role', '=', 'admin')->first();
             $user = User::where('role', '=', 'user')->first();
             $names = [
@@ -36,10 +36,10 @@ class DropdownSeeder extends Seeder
             ];
 
             foreach ($names as $n) {
-                $drop = Dropdown::create($n);
+                $drop = DropdownModel::create($n);
 
                 foreach ($items as $i) {
-                    DropdownItem::create( array_merge($i, [
+                    DropdownItemModel::create( array_merge($i, [
                         'ddl_id' => $drop->id,
                     ]) );
                 }

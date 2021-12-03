@@ -5,9 +5,9 @@ namespace App\Models\Dropdowns;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DropdownItem extends Model
+class DropdownModel extends Model
 {
     use HasFactory;
 
-    protected $table = 'dropdown_items';
+    protected $table = 'dropdowns';
 }
