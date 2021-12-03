@@ -28,14 +28,6 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
 
-        try {
-            DB::connection()->getPdo();
-        } catch (\Exception $e) {
-            $def = config('database.default');
-            $dbname = config('database.connections.' . $def . '.database');
-            DB::connection($def . '_schema')->statement('CREATE DATABASE ' . $dbname);
-        }
-
         require base_path('routes/console.php');
     }
 }
