@@ -5,14 +5,10 @@ namespace App\Providers;
 use App\Repositories\Data\DataTableBase;
 use App\Repositories\Data\DataTableCacher;
 use App\Repositories\Data\DataTableItemBase;
-use App\Repositories\Data\DataTableItemCacher;
-use App\Repositories\Data\DataTableItemLogger;
 use App\Repositories\Data\DataTableItemRepository;
 use App\Repositories\Data\DataTableLogger;
 use App\Repositories\Data\DataTableRepository;
 use App\Repositories\Dropdowns\DropdownBase;
-use App\Repositories\Dropdowns\DropdownCacher;
-use App\Repositories\Dropdowns\DropdownLogger;
 use App\Repositories\Dropdowns\DropdownRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,9 +21,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(DataTableRepository::class, DataTableCacher::class);
-        $this->app->singleton(DataTableItemRepository::class, DataTableItemCacher::class);
-        $this->app->singleton(DropdownRepository::class, DropdownCacher::class);
+        //Order of functions: 'Caching' -> 'Logging' -> 'Base'
+        $this->app->when(DataTableCacher::class)
+            ->needs(DataTableRepository::class)
+            ->give(DataTableLogger::class);
+
+        $this->app->when(DataTableLogger::class)
+            ->needs(DataTableRepository::class)
+            ->give(DataTableBase::class);
+
+        //Singletones
+        $this->app->singleton(DataTableRepository::class, DataTableBase::class);
+        $this->app->singleton(DataTableItemRepository::class, DataTableItemBase::class);
+        $this->app->singleton(DropdownRepository::class, DropdownBase::class);
     }
 
     /**

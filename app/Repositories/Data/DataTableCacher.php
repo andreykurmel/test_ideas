@@ -6,15 +6,30 @@ use App\Entities\Data\DataTable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
-class DataTableCacher extends DataTableLogger
+class DataTableCacher implements DataTableRepository
 {
+    /**
+     * @param DataTableRepository $repository
+     */
+    public function __construct(protected DataTableRepository $repository)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get(array $ids = []): Collection
+    {
+        return $this->repository->get($ids);
+    }
+
     /**
      * @inheritdoc
      */
     public function getById(int $id): DataTable
     {
         return Cache::rememberForever('data_table_'.$id, function () use ($id) {
-            return parent::getById($id);
+            return $this->repository->getById($id);
         });
     }
 
@@ -24,7 +39,7 @@ class DataTableCacher extends DataTableLogger
     public function allTables(): Collection
     {
         return Cache::rememberForever('data_tables_all', function () {
-            return parent::allTables();
+            return $this->repository->allTables();
         });
     }
 
@@ -34,7 +49,7 @@ class DataTableCacher extends DataTableLogger
     public function create(DataTable $dataTable): DataTable
     {
         Cache::forget('data_tables_all');
-        return parent::create($dataTable);
+        return $this->repository->create($dataTable);
     }
 
     /**
@@ -44,7 +59,7 @@ class DataTableCacher extends DataTableLogger
     {
         Cache::forget('data_tables_all');
         Cache::forget('data_table_'.$dataTable->id);
-        return parent::update($dataTable);
+        return $this->repository->update($dataTable);
     }
 
 }

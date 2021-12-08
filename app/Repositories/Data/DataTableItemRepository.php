@@ -18,9 +18,9 @@ interface DataTableItemRepository
 
     /**
      * @param DataTable $dataTable
-     * @return DataTable
+     * @return DataTable[]
      */
-    public function tableRelation(DataTable $dataTable): DataTable;
+    public function tableRelation(DataTable $dataTable): array;
 
     /**
      * @param Collection<DataTable>|DataTable[] $tables

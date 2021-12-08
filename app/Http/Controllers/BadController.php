@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-class SoftController extends Controller
+class BadController extends Controller
 {
     /**
      * @param Request $request

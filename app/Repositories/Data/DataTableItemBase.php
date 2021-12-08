@@ -27,14 +27,14 @@ class DataTableItemBase implements DataTableItemRepository
     /**
      * @inheritdoc
      */
-    public function tableRelation(DataTable $dataTable): DataTable
+    public function tableRelation(DataTable $dataTable): array
     {
-        $dataTable->columns = DataTableColumnModel::where('table_id', '=', $dataTable->id)
+        return DataTableColumnModel::where('table_id', '=', $dataTable->id)
             ->get()
             ->map(function (DataTableColumnModel $model) {
                 return new DataTableColumn($model->toArray());
-            });
-        return $dataTable;
+            })
+            ->toArray();
     }
 
     /**

@@ -10,7 +10,7 @@ use App\Factories\ServiceFactory;
 use App\Models\Datas\DataTableModel;
 use Illuminate\Http\Request;
 
-class HardController extends Controller
+class GoodController extends Controller
 {
     protected $tableRepo;
     protected $columnRepo;
@@ -33,9 +33,14 @@ class HardController extends Controller
     public function tableById(Request $request)
     {
         $t = $this->tableRepo->getById($request->table_id);
-        $this->columnRepo->tableRelation($t);
-        $this->dropRepo->massColumnRelation($t->columns);
+        $t->columns = $this->columnRepo->tableRelation($t);
+        $this->dropRepo->massColumnRelation(collect($t->columns));
 
+        collect($t->columns)->map(function (DataTableColumn $column) {
+            if ($column->dropdown) {
+                $column->dropdown = $column->dropdown->only('id', 'name');
+            }
+        });
         return $t->toArray();
     }
 

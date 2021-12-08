@@ -13,7 +13,7 @@ class TestController extends Controller
     {
         //dd(ServiceFactory::dataTable()->dataTablesWithItems([2,3,4]));
 
-        $cont = new HardController();
+        $cont = new GoodController();
         dd(
             $cont->tableById(new Request(['table_id'=>2])),
             $cont->allTables(new Request()),
@@ -23,7 +23,7 @@ class TestController extends Controller
             $cont->updateColumn(new Request(['id'=>5, 'fields'=>['table_id'=>5,'field'=>'controller','header'=>'changed']])),*/
         );
 
-        $cont = new SoftController();
+        $cont = new BadController();
         dd(
             $cont->tableById(new Request(['table_id'=>2])),
             $cont->allTables(new Request()),

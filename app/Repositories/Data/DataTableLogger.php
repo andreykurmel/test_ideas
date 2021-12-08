@@ -3,17 +3,49 @@
 namespace App\Repositories\Data;
 
 use App\Entities\Data\DataTable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
-class DataTableLogger extends DataTableBase
+class DataTableLogger implements DataTableRepository
 {
+    /**
+     * @param DataTableRepository $repository
+     */
+    public function __construct(protected DataTableRepository $repository)
+    {
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function get(array $ids = []): Collection
+    {
+        return $this->repository->get($ids);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getById(int $id): DataTable
+    {
+        return $this->repository->getById($id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function allTables(): Collection
+    {
+        return $this->repository->allTables();
+    }
+
     /**
      * @inheritdoc
      */
     public function create(DataTable $dataTable): DataTable
     {
         Log::info('table created');
-        return parent::create($dataTable);
+        return $this->repository->create($dataTable);
     }
 
     /**
@@ -22,7 +54,7 @@ class DataTableLogger extends DataTableBase
     public function update(DataTable $dataTable): DataTable
     {
         Log::info('table update');
-        return parent::update($dataTable);
+        return $this->repository->update($dataTable);
     }
 
 }

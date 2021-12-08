@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 class DataTable extends Entity
 {
-    protected array $exceptKeys = ['columns'];
+    //protected array $exceptKeys = ['columns'];
 
     public ?int $id;
     public int $user_id;
@@ -17,9 +17,9 @@ class DataTable extends Entity
     public string $notes = '';
 
     /**
-     * @var Collection<DataTableColumn>|null
+     * @var DataTableColumn[]|null
      */
-    public ?Collection $columns;
+    public ?array $columns;
     public ?int $columns_count;
 
     /**
@@ -28,7 +28,7 @@ class DataTable extends Entity
     public function columns(): Collection
     {
         if (!$this->columns) {
-            RepositoryFactory::dataTableItem()->tableRelation($this);
+            $this->columns = RepositoryFactory::dataTableItem()->tableRelation($this);
         }
         return $this->columns;
     }
@@ -39,13 +39,13 @@ class DataTable extends Entity
     public function toArray(): array
     {
         $array = parent::toArray();
-        if ($this->columns) {
+        /*if ($this->columns) {
             $array['columns'] = $this->columns
                 ->map(function (DataTableColumn $column) {
                     return $column->toArray();
                 })
                 ->toArray();
-        }
+        }*/
         return $array;
     }
 }
