@@ -4,6 +4,7 @@ namespace App\Factories;
 
 use App\Repositories\Data\DataTableItemRepository;
 use App\Repositories\Data\DataTableRepository;
+use App\Repositories\Dropdowns\DropdownRepository;
 
 class RepositoryFactory
 {
@@ -21,5 +22,13 @@ class RepositoryFactory
     public static function dataTableItem(): DataTableItemRepository
     {
         return app(DataTableItemRepository::class);
+    }
+
+    /**
+     * @return DropdownRepository
+     */
+    public static function dropdown(): DropdownRepository
+    {
+        return app(DropdownRepository::class);
     }
 }

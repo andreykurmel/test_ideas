@@ -5,6 +5,7 @@ namespace App\Repositories\Data;
 use App\Entities\Data\DataTable;
 use App\Entities\Data\DataTableColumn;
 use App\Models\Datas\DataTableColumnModel;
+use Illuminate\Support\Collection;
 
 class DataTableItemBase implements DataTableItemRepository
 {
@@ -35,6 +36,26 @@ class DataTableItemBase implements DataTableItemRepository
             });
         return $dataTable;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function massTableRelationCount(Collection $tables): Collection
+    {
+        $ids = $tables->pluck('id');
+        $columns = DataTableColumnModel::whereIn('table_id', $ids)
+            ->get()
+            ->map(function (DataTableColumnModel $model) {
+                return new DataTableColumn($model->toArray());
+            });
+
+        foreach ($tables as $table) {
+            $table->columns_count = $columns->where('table_id', '=', $table->id)->count();
+        }
+
+        return $columns;
+    }
+
 
     /**
      * @inheritdoc

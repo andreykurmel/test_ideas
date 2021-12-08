@@ -23,6 +23,12 @@ interface DataTableItemRepository
     public function tableRelation(DataTable $dataTable): DataTable;
 
     /**
+     * @param Collection<DataTable>|DataTable[] $tables
+     * @return Collection<DataTable>|DataTable[]
+     */
+    public function massTableRelationCount(Collection $tables): Collection;
+
+    /**
      * @param DataTableColumn $column
      * @return DataTableColumn
      */

@@ -2,6 +2,7 @@
 
 namespace App\Entities\Data;
 
+use App\Entities\Dropdowns\Dropdown;
 use App\Entities\Entity;
 
 class DataTableColumn extends Entity
@@ -12,4 +13,9 @@ class DataTableColumn extends Entity
     public string $field;
     public string $header;
     public string $default = '';
+
+    /**
+     * @var Dropdown|null
+     */
+    public ?Dropdown $dropdown;
 }
