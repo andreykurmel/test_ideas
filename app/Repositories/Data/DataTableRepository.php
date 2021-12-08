@@ -8,8 +8,33 @@ use Illuminate\Support\Collection;
 interface DataTableRepository
 {
     /**
-     * //return Collection<DataTable> - not working in 'foreach'
-     * @return Collection|DataTable[]
+     * @param array $ids
+     * @return Collection<DataTable>|DataTable[]
      */
-    public function all(): iterable;
+    public function get(array $ids = []): Collection;
+
+
+
+    /**
+     * @param int $id
+     * @return DataTable
+     */
+    public function getById(int $id): DataTable;
+
+    /**
+     * @return Collection<DataTable>|DataTable[]
+     */
+    public function allTables(): Collection;
+
+    /**
+     * @param DataTable $dataTable
+     * @return DataTable
+     */
+    public function create(DataTable $dataTable): DataTable;
+
+    /**
+     * @param DataTable $dataTable
+     * @return DataTable
+     */
+    public function update(DataTable $dataTable): DataTable;
 }

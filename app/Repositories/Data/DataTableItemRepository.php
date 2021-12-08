@@ -8,8 +8,29 @@ use Illuminate\Support\Collection;
 
 interface DataTableItemRepository
 {
+
     /**
      * @return Collection|DataTableColumn[]
      */
-    public function forParent(DataTable $dataTable): iterable;
+    public function getForTables(iterable $table_ids): iterable;
+
+
+
+    /**
+     * @param DataTable $dataTable
+     * @return DataTable
+     */
+    public function tableRelation(DataTable $dataTable): DataTable;
+
+    /**
+     * @param DataTableColumn $column
+     * @return DataTableColumn
+     */
+    public function create(DataTableColumn $column): DataTableColumn;
+
+    /**
+     * @param DataTableColumn $column
+     * @return DataTableColumn
+     */
+    public function update(DataTableColumn $column): DataTableColumn;
 }
