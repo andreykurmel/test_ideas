@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Dropdowns;
 
+use App\Entities\Data\DataTableColumn;
 use App\Entities\Dropdowns\Dropdown;
 use App\Models\Dropdowns\DropdownModel;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class DropdownBase implements DropdownRepository
@@ -32,19 +34,16 @@ class DropdownBase implements DropdownRepository
     /**
      * @inheritDoc
      */
-    public function massColumnRelation(Collection $columns): Collection
+    public function get(array|int $ids): array|Dropdown
     {
-        $ids = $columns->pluck('ddl_id');
-        $ddls = DropdownModel::whereIn('id', $ids)
-            ->get()
-            ->map(function (DropdownModel $model) {
-                return new Dropdown($model->toArray());
-            });
-
-        foreach ($columns as $col) {
-            $col->dropdown = $ddls->where('id', '=', $col->ddl_id)->first();
-        }
-
-        return $columns;
+        $single = !is_array($ids);
+        $rows = DropdownModel::whereIn('id', $single ? [$ids] : $ids)
+                ->get()
+                ->map(function (DropdownModel $model) {
+                    return new Dropdown($model->toArray());
+                })
+                ->toArray();
+        return $single ? Arr::first($rows) : $rows;
     }
+
 }

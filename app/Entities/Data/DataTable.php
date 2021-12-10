@@ -4,12 +4,11 @@ namespace App\Entities\Data;
 
 use App\Entities\Entity;
 use App\Factories\RepositoryFactory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class DataTable extends Entity
 {
-    //protected array $exceptKeys = ['columns'];
-
     public ?int $id;
     public int $user_id;
     public string $name;
@@ -19,19 +18,12 @@ class DataTable extends Entity
     /**
      * @var DataTableColumn[]|null
      */
-    public ?array $columns;
-    public ?int $columns_count;
+    public ?array $columns = null;
 
     /**
-     * @return Collection
+     * @var int|null
      */
-    public function columns(): Collection
-    {
-        if (!$this->columns) {
-            $this->columns = RepositoryFactory::dataTableItem()->tableRelation($this);
-        }
-        return $this->columns;
-    }
+    public ?int $columns_count = null;
 
     /**
      * @return array
@@ -39,13 +31,12 @@ class DataTable extends Entity
     public function toArray(): array
     {
         $array = parent::toArray();
-        /*if ($this->columns) {
-            $array['columns'] = $this->columns
-                ->map(function (DataTableColumn $column) {
-                    return $column->toArray();
-                })
-                ->toArray();
-        }*/
+        if (is_null($this->columns)) {
+            unset($array['columns']);
+        }
+        if (is_null($this->columns_count)) {
+            unset($array['columns_count']);
+        }
         return $array;
     }
 }

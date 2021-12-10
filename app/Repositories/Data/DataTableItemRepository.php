@@ -8,25 +8,11 @@ use Illuminate\Support\Collection;
 
 interface DataTableItemRepository
 {
-
     /**
-     * @return Collection|DataTableColumn[]
+     * @param int[] $table_ids
+     * @return DataTableColumn[]
      */
-    public function getForTables(iterable $table_ids): iterable;
-
-
-
-    /**
-     * @param DataTable $dataTable
-     * @return DataTable[]
-     */
-    public function tableRelation(DataTable $dataTable): array;
-
-    /**
-     * @param Collection<DataTable>|DataTable[] $tables
-     * @return Collection<DataTable>|DataTable[]
-     */
-    public function massTableRelationCount(Collection $tables): Collection;
+    public function getbyTableId(array $table_ids): array;
 
     /**
      * @param DataTableColumn $column

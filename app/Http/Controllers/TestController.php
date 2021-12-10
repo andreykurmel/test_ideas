@@ -11,7 +11,6 @@ class TestController extends Controller
 {
     public function test(Request $request)
     {
-        //dd(ServiceFactory::dataTable()->dataTablesWithItems([2,3,4]));
 
         $cont = new GoodController();
         dd(

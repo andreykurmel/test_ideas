@@ -4,6 +4,8 @@ namespace App\Entities\Data;
 
 use App\Entities\Dropdowns\Dropdown;
 use App\Entities\Entity;
+use App\Factories\RepositoryFactory;
+use Illuminate\Support\Arr;
 
 class DataTableColumn extends Entity
 {
@@ -17,5 +19,5 @@ class DataTableColumn extends Entity
     /**
      * @var Dropdown|null
      */
-    public ?Dropdown $dropdown;
+    public ?Dropdown $dropdown = null;
 }

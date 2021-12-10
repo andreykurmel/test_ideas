@@ -18,7 +18,7 @@ class DataTableCacher implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function get(array $ids = []): Collection
+    public function get(array $ids = []): array
     {
         return $this->repository->get($ids);
     }
@@ -36,7 +36,7 @@ class DataTableCacher implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function allTables(): Collection
+    public function allTables(): array
     {
         return Cache::rememberForever('data_tables_all', function () {
             return $this->repository->allTables();

@@ -7,14 +7,18 @@ use App\Entities\Data\DataTableColumn;
 use App\Entities\Dropdowns\Dropdown;
 use App\Factories\RepositoryFactory;
 use App\Factories\ServiceFactory;
-use App\Models\Datas\DataTableModel;
+use App\Relations\TableColumnRelations;
+use App\Relations\TableRelations;
+use App\Services\DataTableService;
 use Illuminate\Http\Request;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class GoodController extends Controller
 {
     protected $tableRepo;
     protected $columnRepo;
     protected $dropRepo;
+    protected $dataTableService;
 
     /**
      *
@@ -24,6 +28,7 @@ class GoodController extends Controller
         $this->tableRepo = RepositoryFactory::dataTable();
         $this->columnRepo = RepositoryFactory::dataTableItem();
         $this->dropRepo = RepositoryFactory::dropdown();
+        $this->dataTableService = ServiceFactory::dataTable();
     }
 
     /**
@@ -33,28 +38,31 @@ class GoodController extends Controller
     public function tableById(Request $request)
     {
         $t = $this->tableRepo->getById($request->table_id);
-        $t->columns = $this->columnRepo->tableRelation($t);
-        $this->dropRepo->massColumnRelation(collect($t->columns));
+        TableRelations::setColumns($t);
+        TableColumnRelations::setDropdown($t->columns);
 
-        collect($t->columns)->map(function (DataTableColumn $column) {
-            if ($column->dropdown) {
-                $column->dropdown = $column->dropdown->only('id', 'name');
-            }
-        });
+        foreach ($t->columns as $column) {
+            $column->only('id', 'field', 'header', 'dropdown');
+            $column->dropdown?->only('id', 'name');
+        }
+
         return $t->toArray();
     }
 
     /**
      * @param Request $request
-     * @return DataTable[]|\Illuminate\Support\Collection
+     * @return DataTable[]
      */
     public function allTables(Request $request)
     {
-        $tables = $this->tableRepo->allTables();
-        $this->columnRepo->massTableRelationCount($tables);
-        return $tables;
+        return $this->dataTableService->dataTablesWithItemsAndDropdowns($request->ids ?: []);
     }
 
+    /**
+     * @param Request $request
+     * @return DataTable
+     * @throws UnknownProperties
+     */
     public function updateTable(Request $request)
     {
         $t = new DataTable($request->fields);
@@ -65,7 +73,7 @@ class GoodController extends Controller
     /**
      * @param Request $request
      * @return DataTable
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @throws UnknownProperties
      */
     public function createTable(Request $request)
     {
@@ -76,7 +84,7 @@ class GoodController extends Controller
     /**
      * @param Request $request
      * @return DataTableColumn
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @throws UnknownProperties
      */
     public function updateColumn(Request $request)
     {
@@ -88,7 +96,7 @@ class GoodController extends Controller
     /**
      * @param Request $request
      * @return DataTableColumn
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @throws UnknownProperties
      */
     public function createColumn(Request $request)
     {
@@ -99,7 +107,7 @@ class GoodController extends Controller
     /**
      * @param Request $request
      * @return Dropdown
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @throws UnknownProperties
      */
     public function updateDrop(Request $request)
     {
@@ -111,7 +119,7 @@ class GoodController extends Controller
     /**
      * @param Request $request
      * @return Dropdown
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @throws UnknownProperties
      */
     public function createDrop(Request $request)
     {

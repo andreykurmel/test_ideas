@@ -18,7 +18,7 @@ class DataTableLogger implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function get(array $ids = []): Collection
+    public function get(array $ids = []): array
     {
         return $this->repository->get($ids);
     }
@@ -34,7 +34,7 @@ class DataTableLogger implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function allTables(): Collection
+    public function allTables(): array
     {
         return $this->repository->allTables();
     }

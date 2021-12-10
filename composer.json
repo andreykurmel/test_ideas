@@ -5,7 +5,8 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
+        "ext-json": "*",
         "fruitcake/laravel-cors": "v2.0.4",
         "guzzlehttp/guzzle": "7.4.0",
         "laravel/framework": "v8.74.0",
@@ -19,7 +20,8 @@
         "laravel/sail": "1.12.9",
         "mockery/mockery": "1.4.4",
         "nunomaduro/collision": "5.10.0",
-        "phpunit/phpunit": "9.5.10"
+        "phpunit/phpunit": "9.5.10",
+        "barryvdh/laravel-debugbar": "3.6.4"
     },
     "autoload": {
         "psr-4": {

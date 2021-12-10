@@ -13,15 +13,17 @@ class DataTableBase implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function get(array $ids = []): Collection
+    public function get(array $ids = []): array
     {
         $rows = $ids
             ? DataTableModel::whereIn('id', $ids)->get()
             : DataTableModel::all();
 
-        return $rows->map(function (DataTableModel $item) {
-            return new DataTable($item->toArray());
-        });
+        return $rows
+            ->map(function (DataTableModel $item) {
+                return new DataTable($item->toArray());
+            })
+            ->toArray();
     }
 
 
@@ -38,11 +40,13 @@ class DataTableBase implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function allTables(): Collection
+    public function allTables(): array
     {
-        return DataTableModel::all()->map(function (DataTableModel $model) {
-            return new DataTable($model->toArray());
-        });
+        return DataTableModel::all()
+            ->map(function (DataTableModel $model) {
+                return new DataTable($model->toArray());
+            })
+            ->toArray();
     }
 
     /**

@@ -21,8 +21,8 @@ interface DropdownRepository
     public function update(Dropdown $dropdown): Dropdown;
 
     /**
-     * @param Collection<DataTableColumn>|DataTableColumn[] $columns
-     * @return Collection<DataTableColumn>|DataTableColumn[]
+     * @param int[]|int $ids
+     * @return Dropdown[]|Dropdown
      */
-    public function massColumnRelation(Collection $columns): Collection;
+    public function get(array|int $ids): array|Dropdown;
 }
