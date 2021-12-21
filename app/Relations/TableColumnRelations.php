@@ -9,13 +9,26 @@ use Illuminate\Support\Arr;
 class TableColumnRelations
 {
     /**
+     * @var RepositoryFactory
+     */
+    protected $repos;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->repos = RepositoryFactory::instance();
+    }
+
+    /**
      * @param DataTableColumn[]|DataTableColumn $data_table_columns
      */
-    public static function setDropdown(array|DataTableColumn $data_table_columns): void
+    public function setDropdown(array|DataTableColumn $data_table_columns): void
     {
         $columns = is_array($data_table_columns) ? $data_table_columns : [$data_table_columns];
 
-        $dropdowns = RepositoryFactory::dropdown()->get(Arr::pluck($columns, 'ddl_id'));
+        $dropdowns = $this->repos->dropdown()->get(Arr::pluck($columns, 'ddl_id'));
         $dropdowns = collect($dropdowns);
 
         foreach ($columns as $column) {

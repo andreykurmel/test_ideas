@@ -9,9 +9,17 @@ use App\Repositories\Dropdowns\DropdownRepository;
 class RepositoryFactory
 {
     /**
+     * @return $this
+     */
+    public static function instance(): RepositoryFactory
+    {
+        return new static();
+    }
+
+    /**
      * @return DataTableRepository
      */
-    public static function dataTable(): DataTableRepository
+    public function dataTable(): DataTableRepository
     {
         return app(DataTableRepository::class);
     }
@@ -19,7 +27,7 @@ class RepositoryFactory
     /**
      * @return DataTableItemRepository
      */
-    public static function dataTableItem(): DataTableItemRepository
+    public function dataTableItem(): DataTableItemRepository
     {
         return app(DataTableItemRepository::class);
     }
@@ -27,7 +35,7 @@ class RepositoryFactory
     /**
      * @return DropdownRepository
      */
-    public static function dropdown(): DropdownRepository
+    public function dropdown(): DropdownRepository
     {
         return app(DropdownRepository::class);
     }
