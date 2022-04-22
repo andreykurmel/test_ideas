@@ -5,6 +5,8 @@ Repository pattern with DTO benefits:
 > 
 > Structure is comfortable for Testing.
 > 
+> Caching and any wrapper for 'Repositories' can be added easily
+> 
 > Data is agnostic from storage (database, api, file, ...)
 > 
 > Serialized 'Entites' less than 'Models' in 6-10 times. Good for caching and memory.
