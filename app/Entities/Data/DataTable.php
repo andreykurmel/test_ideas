@@ -18,7 +18,17 @@ class DataTable extends Entity
     /**
      * @var DataTableColumn[]|null
      */
-    public ?array $columns = null;
+    protected ?array $columns = null;
+
+    /**
+     * @return DataTableColumn[]|null
+     */
+    public function columns(): array|null
+    {
+        $columns = RepositoryFactory::instance()->dataTableItem()->getbyTableId([$this->id]);
+        $this->hasMany($this, 'columns', $columns, 'table_id', 'id');
+        return $this->columns;
+    }
 
     /**
      * @var int|null

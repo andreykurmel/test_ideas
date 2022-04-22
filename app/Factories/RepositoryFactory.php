@@ -6,8 +6,16 @@ use App\Repositories\Data\DataTableItemRepository;
 use App\Repositories\Data\DataTableRepository;
 use App\Repositories\Dropdowns\DropdownRepository;
 
-class RepositoryFactory
+final class RepositoryFactory
 {
+    /**
+     * @return RepositoryFactory
+     */
+    public static function instance(): RepositoryFactory
+    {
+        return new RepositoryFactory();
+    }
+
     /**
      * @return DataTableRepository
      */
