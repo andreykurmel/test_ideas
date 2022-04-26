@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Data;
 
+use App\Collections\Data\CollectionDataTable;
+use App\Collections\Data\CollectionDataTableColumn;
 use App\Entities\Data\DataTable;
 use App\Entities\Data\DataTableColumn;
 use Illuminate\Support\Collection;
@@ -9,10 +11,10 @@ use Illuminate\Support\Collection;
 interface DataTableItemRepository
 {
     /**
-     * @param int[] $table_ids
-     * @return DataTableColumn[]
+     * @param array $table_ids
+     * @return CollectionDataTableColumn
      */
-    public function getbyTableId(array $table_ids): array;
+    public function getbyTableId(array $table_ids): CollectionDataTableColumn;
 
     /**
      * @param DataTableColumn $column
@@ -25,4 +27,10 @@ interface DataTableItemRepository
      * @return DataTableColumn
      */
     public function update(DataTableColumn $column): DataTableColumn;
+
+    /**
+     * @param CollectionDataTable $collection
+     * @return CollectionDataTable
+     */
+    public function relationColumns(CollectionDataTable $collection): CollectionDataTable;
 }

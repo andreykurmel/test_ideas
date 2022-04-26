@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Dropdowns;
 
+use App\Collections\Data\CollectionDataTableColumn;
+use App\Collections\Dropdowns\CollectionDropdown;
 use App\Entities\Data\DataTableColumn;
 use App\Entities\Dropdowns\Dropdown;
 use Illuminate\Support\Collection;
@@ -21,8 +23,14 @@ interface DropdownRepository
     public function update(Dropdown $dropdown): Dropdown;
 
     /**
-     * @param int[]|int $ids
-     * @return Dropdown[]|Dropdown
+     * @param array $ids
+     * @return CollectionDropdown
      */
-    public function get(array|int $ids): array|Dropdown;
+    public function get(array $ids): CollectionDropdown;
+
+    /**
+     * @param CollectionDataTableColumn $collection
+     * @return CollectionDataTableColumn
+     */
+    public function relatedDropdowns(CollectionDataTableColumn $collection): CollectionDataTableColumn;
 }

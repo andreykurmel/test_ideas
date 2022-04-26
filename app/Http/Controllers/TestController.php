@@ -14,7 +14,7 @@ class TestController extends Controller
 
         $cont = new GoodController();
         dd(
-            $cont->tableById(new Request(['table_id'=>2])),
+            //$cont->tableById(new Request(['table_id'=>2])),
             $cont->allTables(new Request()),
             /*$cont->createTable(new Request(['user_id'=>1,'name'=>'controller','db_name'=>'database'])),
             $cont->updateTable(new Request(['id'=>5, 'fields'=>['user_id'=>1,'name'=>'controller','db_name'=>'changed']])),

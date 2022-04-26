@@ -36,7 +36,7 @@ class GoodController extends Controller
      */
     public function tableById(Request $request)
     {
-        $t = $this->repositories->dataTable()->getById($request->table_id);
+        $t = $this->repositories->dataTable()->find($request->table_id);
         $this->relations->table()->setColumns($t);
         $this->relations->tableColumn()->setDropdown($t->columns);
 
@@ -50,7 +50,7 @@ class GoodController extends Controller
 
     /**
      * @param Request $request
-     * @return DataTable[]
+     * @return \App\Collections\Data\CollectionDataTable
      */
     public function allTables(Request $request)
     {

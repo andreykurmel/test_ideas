@@ -3,16 +3,23 @@
 namespace App\Collections\Data;
 
 use App\Collections\DtoCollection;
+use App\Entities\Data\DataTable;
 use App\Factories\RepositoryFactory;
 
 class CollectionDataTable extends DtoCollection
 {
     /**
+     * @var string
+     */
+    protected $entity = DataTable::class;
+
+    /**
      *
      */
-    public function loadTaskManagement(): void
+    public function loadColumns(): void
     {
-        $columns = RepositoryFactory::instance()->dataTableItem()->getbyTableId($this->pluck($this->items, 'id'));
-        $this->hasMany($this->items, 'columns', $columns, 'table_id', 'id');
+        RepositoryFactory::instance()
+            ->dataTableItem()
+            ->relationColumns($this);
     }
 }

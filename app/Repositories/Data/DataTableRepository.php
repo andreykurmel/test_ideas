@@ -2,26 +2,22 @@
 
 namespace App\Repositories\Data;
 
+use App\Collections\Data\CollectionDataTable;
 use App\Entities\Data\DataTable;
 
 interface DataTableRepository
 {
     /**
      * @param array $ids
-     * @return DataTable[]
+     * @return CollectionDataTable
      */
-    public function get(array $ids = []): array;
+    public function get(array $ids = []): CollectionDataTable;
 
     /**
      * @param int $id
      * @return DataTable
      */
-    public function getById(int $id): DataTable;
-
-    /**
-     * @return DataTable[]
-     */
-    public function allTables(): array;
+    public function find(int $id): DataTable;
 
     /**
      * @param DataTable $dataTable

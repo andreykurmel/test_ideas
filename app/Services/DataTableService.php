@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Collections\Data\CollectionDataTable;
+use App\Collections\Data\CollectionDataTableColumn;
 use App\Entities\Data\DataTable;
 use App\Factories\RelationFactory;
 use App\Factories\RepositoryFactory;
@@ -33,14 +35,14 @@ class DataTableService
 
     /**
      * @param array $ids
-     * @return DataTable[]
+     * @return CollectionDataTable
      */
-    public function dataTablesWithItemsAndDropdowns(array $ids = []): array
+    public function dataTablesWithItemsAndDropdowns(array $ids = []): CollectionDataTable
     {
         $tables = $this->repos->dataTable()->get($ids);
-        $this->relations->table()->setColumns($tables);
-        $all_columns = collect($tables)->pluck('columns')->flatten()->toArray();
-        $this->relations->tableColumn()->setDropdown($all_columns);
+        $tables->loadColumns();
+        $cols = new CollectionDataTableColumn($tables->pluck('columns')->flatten());
+        $cols->loadDropdown();
         return $tables;
     }
 }

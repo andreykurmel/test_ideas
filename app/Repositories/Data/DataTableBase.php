@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Data;
 
+use App\Collections\Data\CollectionDataTable;
 use App\Entities\Data\DataTable;
 use App\Factories\RepositoryFactory;
 use App\Models\Datas\DataTableModel;
@@ -13,40 +14,27 @@ class DataTableBase implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function get(array $ids = []): array
+    public function get(array $ids = []): CollectionDataTable
     {
         $rows = $ids
             ? DataTableModel::whereIn('id', $ids)->get()
             : DataTableModel::all();
 
-        return $rows
+        $rows = $rows
             ->map(function (DataTableModel $item) {
                 return new DataTable($item->toArray());
-            })
-            ->toArray();
+            });
+
+        return new CollectionDataTable($rows);
     }
-
-
 
     /**
      * @inheritdoc
      */
-    public function getById(int $id): DataTable
+    public function find(int $id): DataTable
     {
         $m = DataTableModel::where('id', '=', $id)->first();
         return new DataTable($m->toArray());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function allTables(): array
-    {
-        return DataTableModel::all()
-            ->map(function (DataTableModel $model) {
-                return new DataTable($model->toArray());
-            })
-            ->toArray();
     }
 
     /**

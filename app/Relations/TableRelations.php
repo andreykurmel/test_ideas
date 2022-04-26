@@ -29,6 +29,6 @@ class TableRelations
     public function setColumns(array|DataTable $data_tables): void
     {
         $columns = $this->repos->dataTableItem()->getbyTableId($this->pluck($data_tables, 'id'));
-        $this->hasMany($data_tables, 'columns', $columns, 'id', 'table_id');
+        $this->hasMany($data_tables, 'columns', $columns->toArray(), 'id', 'table_id');
     }
 }

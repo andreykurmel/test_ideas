@@ -2,10 +2,14 @@
 
 namespace App\Collections;
 
-use App\Relations\Relations;
+use App\Entities\Entity;
 use Illuminate\Support\Collection;
 
 class DtoCollection extends Collection
 {
-    use Relations;
+    /**
+     * @var string
+     */
+    protected $entity = Entity::class;
+
 }
