@@ -8,16 +8,12 @@ use App\Entities\Dropdowns\Dropdown;
 use App\Factories\RelationFactory;
 use App\Factories\RepositoryFactory;
 use App\Factories\ServiceFactory;
-use App\Relations\TableColumnRelations;
-use App\Relations\TableRelations;
 use App\Services\DataTableService;
 use Illuminate\Http\Request;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class GoodController extends Controller
 {
-    protected $repositories;
-    protected $relations;
     protected $services;
 
     /**
@@ -25,32 +21,12 @@ class GoodController extends Controller
      */
     public function __construct()
     {
-        $this->repositories = RepositoryFactory::instance();
-        $this->relations = RelationFactory::instance();
         $this->services = ServiceFactory::instance();
     }
 
     /**
      * @param Request $request
-     * @return array
-     */
-    public function tableById(Request $request)
-    {
-        $t = $this->repositories->dataTable()->find($request->table_id);
-        $this->relations->table()->setColumns($t);
-        $this->relations->tableColumn()->setDropdown($t->columns);
-
-        foreach ($t->columns as $column) {
-            $column->only('id', 'field', 'header', 'dropdown');
-            $column->dropdown?->only('id', 'name');
-        }
-
-        return $t->toArray();
-    }
-
-    /**
-     * @param Request $request
-     * @return \App\Collections\Data\CollectionDataTable
+     * @return DataTable[]
      */
     public function allTables(Request $request)
     {
@@ -66,7 +42,7 @@ class GoodController extends Controller
     {
         $t = new DataTable($request->fields);
         $t->id = $request->id;
-        return $this->repositories->dataTable()->update($t);
+        return RepositoryFactory::dataTable()->update($t);
     }
 
     /**
@@ -77,7 +53,7 @@ class GoodController extends Controller
     public function createTable(Request $request)
     {
         $t = new DataTable($request->all());
-        return $this->repositories->dataTable()->create($t);
+        return RepositoryFactory::dataTable()->create($t);
     }
 
     /**
@@ -89,7 +65,7 @@ class GoodController extends Controller
     {
         $c = new DataTableColumn($request->fields);
         $c->id = $request->id;
-        return $this->repositories->dataTableItem()->update($c);
+        return RepositoryFactory::dataTableItem()->update($c);
     }
 
     /**
@@ -100,7 +76,7 @@ class GoodController extends Controller
     public function createColumn(Request $request)
     {
         $c = new DataTableColumn($request->all());
-        return $this->repositories->dataTableItem()->create($c);
+        return RepositoryFactory::dataTableItem()->create($c);
     }
 
     /**
@@ -112,7 +88,7 @@ class GoodController extends Controller
     {
         $d = new Dropdown($request->fields);
         $d->id = $request->id;
-        return $this->repositories->dropdown()->update($d);
+        return RepositoryFactory::dropdown()->update($d);
     }
 
     /**
@@ -123,6 +99,6 @@ class GoodController extends Controller
     public function createDrop(Request $request)
     {
         $c = new Dropdown($request->all());
-        return $this->repositories->dropdown()->create($c);
+        return RepositoryFactory::dropdown()->create($c);
     }
 }

@@ -2,19 +2,16 @@
 
 namespace App\Repositories\Data;
 
-use App\Collections\Data\CollectionDataTable;
-use App\Collections\Data\CollectionDataTableColumn;
 use App\Entities\Data\DataTable;
 use App\Entities\Data\DataTableColumn;
-use Illuminate\Support\Collection;
 
 interface DataTableItemRepository
 {
     /**
      * @param array $table_ids
-     * @return CollectionDataTableColumn
+     * @return array
      */
-    public function getbyTableId(array $table_ids): CollectionDataTableColumn;
+    public function getbyTableId(array $table_ids): array;
 
     /**
      * @param DataTableColumn $column
@@ -29,8 +26,7 @@ interface DataTableItemRepository
     public function update(DataTableColumn $column): DataTableColumn;
 
     /**
-     * @param CollectionDataTable $collection
-     * @return CollectionDataTable
+     * @param DataTableColumn[]|DataTableColumn $datas
      */
-    public function relationColumns(CollectionDataTable $collection): CollectionDataTable;
+    public function relatedDropdown(array|DataTableColumn $datas): void;
 }

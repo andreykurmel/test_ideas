@@ -2,8 +2,6 @@
 
 namespace App\Repositories\Dropdowns;
 
-use App\Collections\Data\CollectionDataTableColumn;
-use App\Collections\Dropdowns\CollectionDropdown;
 use App\Entities\Data\DataTableColumn;
 use App\Entities\Dropdowns\Dropdown;
 use App\Models\Dropdowns\DropdownModel;
@@ -36,27 +34,14 @@ class DropdownBase implements DropdownRepository
     /**
      * @inheritDoc
      */
-    public function get(array $ids): CollectionDropdown
+    public function get(array $ids): array
     {
-        $rows = DropdownModel::whereIn('id', $ids)
-                ->get()
-                ->map(function (DropdownModel $model) {
-                    return new Dropdown($model->toArray());
-                });
-        return new CollectionDropdown($rows);
-    }
-
-    /**
-     * @param CollectionDataTableColumn $collection
-     * @return CollectionDataTableColumn
-     */
-    public function relatedDropdowns(CollectionDataTableColumn $collection): CollectionDataTableColumn
-    {
-        $drops = $this->get($collection->pluck('ddl_id')->toArray());
-        $collection->each(function (DataTableColumn $item) use ($drops) {
-            $item->dropdown = $drops->where('id', '=', $item->ddl_id)->first();
-        });
-        return $collection;
+        return DropdownModel::whereIn('id', $ids)
+            ->get()
+            ->map(function (DropdownModel $model) {
+                return new Dropdown($model->toArray());
+            })
+            ->toArray();
     }
 
 }

@@ -2,34 +2,33 @@
 
 namespace App\Repositories\Data;
 
-use App\Collections\Data\CollectionDataTable;
-use App\Collections\Data\CollectionDataTableColumn;
-use App\Entities\Data\DataTable;
 use App\Entities\Data\DataTableColumn;
+use App\Factories\RepositoryFactory;
 use App\Models\Datas\DataTableColumnModel;
 use Illuminate\Support\Arr;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class DataTableItemBase implements DataTableItemRepository
 {
     /**
      * @param array $table_ids
-     * @return CollectionDataTableColumn
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @return array
+     * @throws UnknownProperties
      */
-    public function getbyTableId(array $table_ids): CollectionDataTableColumn
+    public function getbyTableId(array $table_ids): array
     {
-        $rows = DataTableColumnModel::whereIn('table_id', $table_ids)
+        return DataTableColumnModel::whereIn('table_id', $table_ids)
             ->get()
             ->map(function (DataTableColumnModel $model) {
                 return new DataTableColumn($model->toArray());
-            });
-        return new CollectionDataTableColumn($rows);
+            })
+            ->toArray();
     }
 
     /**
      * @param DataTableColumn $column
      * @return DataTableColumn
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @throws UnknownProperties
      */
     public function create(DataTableColumn $column): DataTableColumn
     {
@@ -50,17 +49,17 @@ class DataTableItemBase implements DataTableItemRepository
     }
 
     /**
-     * @param CollectionDataTable $collection
-     * @return CollectionDataTable
-     * @throws \Spatie\DataTransferObject\Exceptions\UnknownProperties
+     * @param DataTableColumn[]|DataTableColumn $datas
      */
-    public function relationColumns(CollectionDataTable $collection): CollectionDataTable
+    public function relatedDropdown(array|DataTableColumn $datas): void
     {
-        $columns = $this->getbyTableId($collection->pluck('id')->toArray());
-        $collection->each(function (DataTable $item) use ($columns) {
-            $item->columns = $columns->where('table_id', '=', $item->id)->values();
+        $columns = $datas instanceof DataTableColumn ? [$datas] : $datas;
+        $drops = RepositoryFactory::dropdown()->get(Arr::pluck($columns, 'ddl_id'));
+        collect($columns)->each(function (DataTableColumn $item) use ($drops) {
+            $item->dropdown = collect($drops)
+                ->where('id', '=', $item->ddl_id)
+                ->first();
         });
-        return $collection;
     }
 
 }

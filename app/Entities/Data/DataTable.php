@@ -2,7 +2,6 @@
 
 namespace App\Entities\Data;
 
-use App\Collections\Data\CollectionDataTableColumn;
 use App\Entities\Entity;
 
 class DataTable extends Entity
@@ -14,9 +13,9 @@ class DataTable extends Entity
     public string $notes = '';
 
     /**
-     * @var CollectionDataTableColumn|null
+     * @var DataTableColumn[]|null
      */
-    public ?CollectionDataTableColumn $columns = null;
+    public ?array $columns = null;
 
     /**
      * @return array

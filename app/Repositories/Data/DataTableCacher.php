@@ -2,9 +2,7 @@
 
 namespace App\Repositories\Data;
 
-use App\Collections\Data\CollectionDataTable;
 use App\Entities\Data\DataTable;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class DataTableCacher implements DataTableRepository
@@ -19,7 +17,7 @@ class DataTableCacher implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function get(array $ids = []): CollectionDataTable
+    public function get(array $ids = []): array
     {
         return $this->repository->get($ids);
     }
@@ -51,6 +49,14 @@ class DataTableCacher implements DataTableRepository
         Cache::forget('data_tables_all');
         Cache::forget('data_table_'.$dataTable->id);
         return $this->repository->update($dataTable);
+    }
+
+    /**
+     * @param DataTable[]|DataTable $datas
+     */
+    public function relatedColumns(array|DataTable $datas): void
+    {
+        $this->repository->relatedColumns($datas);
     }
 
 }

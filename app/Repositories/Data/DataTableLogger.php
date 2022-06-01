@@ -2,9 +2,7 @@
 
 namespace App\Repositories\Data;
 
-use App\Collections\Data\CollectionDataTable;
 use App\Entities\Data\DataTable;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class DataTableLogger implements DataTableRepository
@@ -19,7 +17,7 @@ class DataTableLogger implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function get(array $ids = []): CollectionDataTable
+    public function get(array $ids = []): array
     {
         return $this->repository->get($ids);
     }
@@ -48,6 +46,14 @@ class DataTableLogger implements DataTableRepository
     {
         Log::info('table update');
         return $this->repository->update($dataTable);
+    }
+
+    /**
+     * @param DataTable[]|DataTable $datas
+     */
+    public function relatedColumns(array|DataTable $datas): void
+    {
+        $this->repository->relatedColumns($datas);
     }
 
 }

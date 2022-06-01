@@ -2,15 +2,12 @@
 
 namespace App\Entities;
 
-use App\Relations\Relations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Spatie\DataTransferObject\DataTransferObject;
 
 class Entity extends DataTransferObject
 {
-    use Relations;
-
     /**
      * @param array $array
      * @return array

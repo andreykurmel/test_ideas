@@ -2,11 +2,10 @@
 
 namespace App\Repositories\Data;
 
-use App\Collections\Data\CollectionDataTable;
 use App\Entities\Data\DataTable;
 use App\Factories\RepositoryFactory;
 use App\Models\Datas\DataTableModel;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 
 class DataTableBase implements DataTableRepository
 {
@@ -14,18 +13,17 @@ class DataTableBase implements DataTableRepository
     /**
      * @inheritdoc
      */
-    public function get(array $ids = []): CollectionDataTable
+    public function get(array $ids = []): array
     {
         $rows = $ids
             ? DataTableModel::whereIn('id', $ids)->get()
             : DataTableModel::all();
 
-        $rows = $rows
+        return $rows
             ->map(function (DataTableModel $item) {
                 return new DataTable($item->toArray());
-            });
-
-        return new CollectionDataTable($rows);
+            })
+            ->toArray();
     }
 
     /**
@@ -58,5 +56,19 @@ class DataTableBase implements DataTableRepository
         return $dataTable;
     }
 
+    /**
+     * @param DataTable[]|DataTable $datas
+     */
+    public function relatedColumns(array|DataTable $datas): void
+    {
+        $tables = $datas instanceof DataTable ? [$datas] : $datas;
+        $columns = RepositoryFactory::dataTableItem()->getbyTableId(Arr::pluck($tables, 'id'));
+        collect($tables)->each(function (DataTable $item) use ($columns) {
+            $item->columns = collect($columns)
+                ->where('table_id', '=', $item->id)
+                ->values()
+                ->toArray();
+        });
+    }
 
 }

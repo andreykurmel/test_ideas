@@ -2,16 +2,15 @@
 
 namespace App\Repositories\Data;
 
-use App\Collections\Data\CollectionDataTable;
 use App\Entities\Data\DataTable;
 
 interface DataTableRepository
 {
     /**
      * @param array $ids
-     * @return CollectionDataTable
+     * @return array
      */
-    public function get(array $ids = []): CollectionDataTable;
+    public function get(array $ids = []): array;
 
     /**
      * @param int $id
@@ -30,4 +29,9 @@ interface DataTableRepository
      * @return DataTable
      */
     public function update(DataTable $dataTable): DataTable;
+
+    /**
+     * @param array|DataTable $datas
+     */
+    public function relatedColumns(array|DataTable $datas): void;
 }
