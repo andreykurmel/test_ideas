@@ -9,6 +9,11 @@ use Spatie\DataTransferObject\DataTransferObject;
 class Entity extends DataTransferObject
 {
     /**
+     * @var array
+     */
+    protected array $with = [];
+
+    /**
      * @param array $array
      * @return array
      */
@@ -46,4 +51,19 @@ class Entity extends DataTransferObject
         $this->exceptKeys = [...$this->exceptKeys, ...$keys];
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        foreach ($this->with as $relation) {
+            if (method_exists($this, $relation)) {
+                $array[$relation] = $this->{$relation}();
+            }
+        }
+        return $array;
+    }
+
 }

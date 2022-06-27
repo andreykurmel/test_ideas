@@ -2,14 +2,31 @@
 
 namespace App\Repositories\Data;
 
+use App\Entities\Collection;
+use App\Entities\Data\DataTable;
 use App\Entities\Data\DataTableColumn;
 use App\Factories\RepositoryFactory;
 use App\Models\Datas\DataTableColumnModel;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class DataTableItemBase implements DataTableItemRepository
 {
+    protected Collection $collection;
+
+    protected array $relations = ['table'];
+    protected array $loadedRelations = [];
+
+    public function __construct()
+    {
+        $this->collection = new Collection();
+
+        foreach ($this->relations as $relation) {
+            $this->loadedRelations[$relation] = new Collection();
+        }
+    }
+
     /**
      * @param array $table_ids
      * @return array
@@ -17,12 +34,39 @@ class DataTableItemBase implements DataTableItemRepository
      */
     public function getbyTableId(array $table_ids): array
     {
-        return DataTableColumnModel::whereIn('table_id', $table_ids)
+        return DB::table('data_table_columns')
+            ->whereIn('table_id', $table_ids)
             ->get()
-            ->map(function (DataTableColumnModel $model) {
-                return new DataTableColumn($model->toArray());
+            ->map(function ($model) {
+                return new DataTableColumn((array)$model);
             })
             ->toArray();
+    }
+
+    /**
+     * @param array $table_ids
+     * @return array
+     * @throws UnknownProperties
+     */
+    public function relatedToTable(Collection|DataTable $table): Collection
+    {
+        $ids = Collection::wrap($table)->pluck('id');
+
+        if ($this->loadedRelations['table']->intersect($ids)->count()) {
+            return $this->collection->whereIn('table_id', $ids);
+        }
+
+        $query = DB::table('data_table_columns');
+        $query->whereIn('table_id', $ids);
+
+        $columns = new Collection($query->get()->map(function ($model) {
+            return new DataTableColumn((array)$model);
+        }));
+
+        $this->loadedRelations['table'] = $this->loadedRelations['table']->merge($ids)->unique();
+        $this->collection = $this->collection->merge($columns)->unique('id');
+
+        return $columns;
     }
 
     /**

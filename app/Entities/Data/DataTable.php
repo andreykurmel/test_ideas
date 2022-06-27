@@ -2,7 +2,9 @@
 
 namespace App\Entities\Data;
 
+use App\Entities\Collection;
 use App\Entities\Entity;
+use App\Factories\RepositoryFactory;
 
 class DataTable extends Entity
 {
@@ -13,9 +15,17 @@ class DataTable extends Entity
     public string $notes = '';
 
     /**
-     * @var DataTableColumn[]|null
+     * @var Collection|null
      */
-    public ?array $columns = null;
+    protected ?Collection $columns = null;
+
+    public function items()
+    {
+        if (!$this->columns) {
+            $this->columns = RepositoryFactory::dataTableItem()->relatedToTable($this);
+        }
+        return $this->columns;
+    }
 
     /**
      * @return array

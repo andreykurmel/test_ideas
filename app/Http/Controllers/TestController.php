@@ -13,6 +13,7 @@ class TestController extends Controller
     {
 
         $cont = new GoodController();
+        return $cont->allTables(new Request());
         dd(
             //$cont->tableById(new Request(['table_id'=>2])),
             $cont->allTables(new Request()),
