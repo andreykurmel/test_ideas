@@ -17,7 +17,7 @@ class DataTable extends Entity
     /**
      * @var Collection|null
      */
-    protected ?Collection $columns = null;
+    public ?Collection $columns = null;
 
     public function items()
     {
