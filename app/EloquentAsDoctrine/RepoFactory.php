@@ -2,6 +2,8 @@
 
 namespace App\EloquentAsDoctrine;
 
+use App\EloquentAsDoctrine\Repositories\DropdownBaseRepository;
+use App\EloquentAsDoctrine\Repositories\DropdownRepository;
 use App\EloquentAsDoctrine\Repositories\FieldBaseRepository;
 use App\EloquentAsDoctrine\Repositories\FieldRepository;
 use App\EloquentAsDoctrine\Repositories\TableBaseRepository;
@@ -23,5 +25,13 @@ class RepoFactory
     public static function fields(): FieldRepository
     {
         return new FieldBaseRepository();
+    }
+
+    /**
+     * @return DropdownRepository
+     */
+    public static function dropdowns(): DropdownRepository
+    {
+        return new DropdownBaseRepository();
     }
 }

@@ -2,15 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\EloquentAsDoctrine\Collections\FieldCollection;
 use App\EloquentAsDoctrine\RepoFactory;
+use App\Models\Datas\DataTableModel;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
     public function test(Request $request)
     {
+        /*$e_tables = DataTableModel::all();
+        dd($e_tables->makeHidden(['created_at', 'updated_at'])->toArray());*/
+
         $tables = RepoFactory::tables()->all();
-        $tables->loadFields();
+        $tables->loadFields('id,table_id,field,ddl_id');
+
+        $fields = new FieldCollection($tables->pluck('fields')->flatten());
+        $fields->loadDropdown();
+
+        $tables->makeHidden(['created_at', 'updated_at', 'preventsLazyLoading']);
         dd($tables);
 
         $cont = new GoodController();

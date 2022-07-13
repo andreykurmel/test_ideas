@@ -82,10 +82,10 @@ abstract class Entity implements ArrayAccess, Arrayable, Jsonable, JsonSerializa
      * @param array $attributes
      * @return void
      */
-    public function __construct(array $attributes = [])
+    public function __construct($attributes = [])
     {
         $this->syncOriginal();
-        $this->fill($attributes);
+        $this->fill((array)$attributes);
     }
 
     /**
@@ -497,5 +497,27 @@ abstract class Entity implements ArrayAccess, Arrayable, Jsonable, JsonSerializa
     public function toArray()
     {
         return array_merge($this->attributesToArray(), $this->relationsToArray());
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateFormat()
+    {
+        return $this->dateFormat ?: 'Y-m-d H:i:s';
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function isGuarded($key)
+    {
+        if (empty($this->getGuarded())) {
+            return false;
+        }
+
+        return $this->getGuarded() == ['*'] ||
+            ! empty(preg_grep('/^'.preg_quote($key).'$/i', $this->getGuarded()));
     }
 }

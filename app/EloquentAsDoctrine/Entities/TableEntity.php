@@ -2,7 +2,7 @@
 
 namespace App\EloquentAsDoctrine\Entities;
 
-class TableEntity extends Entity
+class TableEntity extends \App\EloquentAsDoctrine\Entities\HeavyEntity\Entity
 {
 
 }
